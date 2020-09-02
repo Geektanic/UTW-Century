@@ -1,0 +1,112 @@
+Century 0->Century 1
+Connect in
+ssh century1@century.underthewire.tech
+Password: century
+
+
+Century 1->Century 2
+$PSVersionTable
+Password: 10.0.14393.3866
+
+Century 2->Century 3
+wget functionality through: Invoke-WebRequest
+	help wget
+name of file on desktop: 443
+	Get-ChildItem
+Password: invoke-webrequest443
+
+Century 3->Century 4
+Get-ChildItem | Measure-Object
+Password: 123
+
+Century 4->Century 5
+Get-ChildItem returns many directories. "Can You Open Me" appears to have spaces.
+Get-ChildItem and hitting tab auto-completes the directory to:
+	Get-ChildItem '.\Can You Open Me'
+Password: 61580
+
+Century 5->Century 6
+$env:computername gets the local hostname
+After Googling I settle on using:
+[System.Net.Dns]::GetHostByName(($env::computername))
+that returned: utw.underthewire.tech
+Name of file on desktop: 3347
+Password: underthewire3347
+
+Century 6->Century 7
+Get-ChildItem -Directory | Measure-Object
+Password: 197
+
+Century 7->Century 8
+We need to be in profile, not desktop: cd ..
+	Powershell: Set-Location ..
+help Get-ChildItem to peruse the options - there is a -Filter and a -Recurse
+Get-ChildItem -Filter "readme*" -Recurse
+There is a readme.txt in Downloads
+cd Downloads
+cat readme.txt
+	Powershell: Get-Content readme.txt
+Password: 7points
+
+Century 8->Century 9
+I imagine it's going to be something similar to (uses different args):
+cat unique.txt | measure-object
+Using the help system I have found Sort-Object has a -Unique arg
+cat unique.txt | Sort-Object -Unique | Measure-Object
+Password: 696
+
+Century 9->Century 10
+We can have cat (Get-Content) use the spaces between words as a delimiter to make a list
+cat Word-File.txt -Delimiter " "
+We can use Select-Object using the -Index arg to grab the 160th object (160 index = 161 object; starts counting at 0)
+cat Word-File.txt -Delimiter " " | Select-Object -Index 160
+Password: pierid
+
+Century 10->Century 11
+Get-Service lists all the services, and can specify a service for it specifically (so, in this case Get-Service "Windows Update"), but I'm not sure how to pull full info such as Description
+help Get-Service -examples doesn't have anything that looks useful in this situation
+After some Googling I found some Get-CimInstance stuff that I was able to adapt to:
+Get-CimInstance -ClassName Win32_Service | Where-Object {$_.DisplayName -like "Windows Update"} | Select Description
+It's not perfect, especially since this requires manually counting words, but it does the job.
+10th + 8th word: windowsupdates
+Name of file on desktop: 110
+Password: windowsupdates110
+
+Century 11->Century 12
+Searching through the profile again
+cd ..
+Get-Child item can once again search recursively again, but this time we'll have it check out attributes for Hidden files
+Get-ChildItem -Attributes "Hidden" -File -Recurse
+I see the answer with a quick scroll, but oh no, plenty of areas we can't access or don't want. Going to adapt to exclude AppData directory:
+Get-ChildItem -Exclude AppData | Get-ChildItem -Attributes "Hidden" -File -Recurse
+Muuuuch cleaner.
+Password: secret_sauce
+
+Century 12->Century 13
+Get-ADDomainController can at least tell us info on the domain controller - utw.underthewire.tech
+get-adcomputer utw -Properties Description
+Name of file on desktop: _things
+Password: i_authenticate_things
+
+Century 13->Century 14
+This feels pretty similar to an earlier objectives...did I do that one earlier differently than they expected or...
+cat countmywords -Delimiter " " | Measure-Object
+Password: 755
+
+Century 14->Century 15
+I tried all kinds of combinations similar to:
+Get-Content countpolos | Select-String -Pattern "polo" -AllMatches | Measure-Object
+I just can't get these types of things to return anything other than "1" - most likely due to it all being one large chunk of text (so one object that does indeed include a match of "polo" somewhere, despite -AllMatches)
+Tried out some delimiter stuff, expecting it to probably not be correct - I'm not sure how Select-String interprets line breaks
+Get-Content .\countpolos -Delimiter " " | Select-String -Pattern "polo" -AllMatches | Measure-Object
+This returns 158 which I thought seemed like a good answer, but does not authenticate Century15
+
+I started down the path of wrapping my cmdlets and using the match and counts, despite being pretty sure it's very similar or exactly the same as the above attempts
+(cat .\countpolos | Select-String -Pattern "polo" -AllMatches).Matches.Count
+Returns 158 - still a no go
+
+Eventually, while Googling, I stumbled upon what looked like a solution, which makes me feel bad, but it works
+((Get-Content .\countpolos).split() | ?{$_ -eq "polo"}).Count
+Return 153 - the password
+
+I'm not 100% sure I'm wrapping my head around what the difference is when using a split vs. the -Delimiter on a space (PowerShell split by default is whitespace), but it's obviously doing something different
