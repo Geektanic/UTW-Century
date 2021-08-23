@@ -1,4 +1,4 @@
-# CIT 330 - UnderTheWire Centruy Solutions
+# UnderTheWire Centruy Solutions
 
 It's not the prettiest write up, and it may not help you fully wrap your head around what all goes into each level of UTW Century, but this document will hopefully give you some idea of how to solve the various UTW Century levels. All items are thoughts and processes I logged while going through UTW Century in prep for assigning it to you in CIT 330. I had completed UTW Century a few years ago, so this was basically a quick blind run, as my notes will make apparent.
 
