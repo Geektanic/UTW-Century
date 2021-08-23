@@ -17,13 +17,13 @@ Or stay here if you just want solutions.
 <pre>
   Connect in
   ssh century1@century.underthewire.tech
-  Password: century
+  Password: century1
 </pre>
 
 <p>Century 1->Century 2</p>
 <pre>
   $PSVersionTable
-  Password: 10.0.14393.3866
+  Password: 10.0.14393.4467
 </pre>
 
 <p>Century 2->Century 3</p>
@@ -55,6 +55,8 @@ Or stay here if you just want solutions.
   After Googling I settle on using:
   [System.Net.Dns]::GetHostByName(($env::computername))
   that returned: utw.underthewire.tech
+  Also works: Get-Item - Path env:* (can't -Filter "*domain*" on this)
+  Can limit with something like: Get-Item -Path env:* | Where-Object{$_.Name -like "*domain*"}
   Name of file on desktop: 3347
   Password: underthewire3347
 </pre>
@@ -102,6 +104,7 @@ Or stay here if you just want solutions.
   help Get-Service -examples doesn't have anything that looks useful in this situation
   After some Googling I found some Get-CimInstance stuff that I was able to adapt to:
   Get-CimInstance -ClassName Win32_Service | Where-Object {$_.DisplayName -like "Windows Update"} | Select Description
+    ALSO: Get-WMIObject -Class Win32_Service -Filter  "Name='wuauserv'"  | Select-Object *
   It's not perfect, especially since this requires manually counting words, but it does the job.
   10th + 8th word: windowsupdates
   Name of file on desktop: 110
